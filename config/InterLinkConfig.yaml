@@ -1,0 +1,4 @@
+interlinkurl: "http://interlink"
+sidecarurl: "http://interlink-plugin"
+interlinkport: "3000"
+sidecarservice: "docker" 

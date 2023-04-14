@@ -1,0 +1,93 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: cineca-vk
+  labels:
+    nodeName: cineca-vk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      nodeName: cineca-vk
+  template:
+    metadata:
+      labels:
+        nodeName: cineca-vk
+    spec:
+      containers:
+      - name: cineca-vk
+        image: malvag/knoc
+        imagePullPolicy: Always
+        args:
+        - virtual-kubelet
+        - --nodename
+        - cineca-vk
+        - --provider
+        - knoc
+        - --provider-config
+        - /home/user0/knoc-cfg.json
+        - --startup-timeout
+        - 10s
+        - --klog.v
+        - "2"
+        - --klog.logtostderr
+        - --log-level
+        - debug
+        env:
+        - name: KUBELET_PORT
+          value: "10250"
+        - name: VKUBELET_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: REMOTE_USER
+          valueFrom:
+            secretKeyRef:
+              name: cineca-vk-remote-secret
+              key: remote_user
+        - name: REMOTE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: cineca-vk-remote-secret
+              key: ssh-privatekey
+        - name: REMOTE_HOST
+          valueFrom:
+            secretKeyRef:
+              name: cineca-vk-remote-secret
+              key: host
+        - name: REMOTE_PORT
+          valueFrom:
+            secretKeyRef:
+              name: cineca-vk-remote-secret
+              key: port
+        - name: KUBE_CURRENT_CONTEXT
+          value: pippo
+        volumeMounts:
+        - name: config
+          mountPath: /home/user0/knoc-cfg.json
+          subPath: knoc-cfg.json
+        - name: kubectl-config
+          mountPath: /home/user0/scripts/
+      serviceAccountName: knoc
+      volumes:
+      - name: config
+        configMap:
+          # Provide the name of the ConfigMap you want to mount.
+          name: cineca-vk-config
+      - name: kubectl-config
+        configMap:
+          # Provide the name of the ConfigMap you want to mount.
+          name: setup-kubeconfig
+
+
+# {{- if .Values.knoc.enabledMetrics }}
+# ports:
+# - name: metrics
+#   containerPort: {{- if .Values.metrics_port }} {{ .Values.metrics_port }} {{- else }} 10255 {{- end }}
+# readinessProbe:
+#   httpGet:
+#     path: /stats/summary
+#     port: metrics
+# {{- end }}
