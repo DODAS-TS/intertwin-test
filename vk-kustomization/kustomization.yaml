@@ -8,3 +8,6 @@ configMapGenerator:
   - name: mock-vk-config 
     files:
       - knoc-cfg.json=knoc-cfg.json
+  - name: vk-config 
+    files:
+      - InterLinkConfig.yaml=InterLinkConfig.yaml 

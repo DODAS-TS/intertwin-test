@@ -1,0 +1,5 @@
+interlinkurl: "http://172.20.0.1"
+sidecarurl: "http://172.20.0.1"
+interlinkport: "3000"
+sidecarport: "4000"
+sidecarservice: "docker"

@@ -2,14 +2,13 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: testvk
-  annotations:
-    slurm-job.knoc.io/flags: "-A INF22_lhc_0  --job-name=TEST_KNOC -p m100_usr_prod -t 1440 --gres=\"gpu:0\" --cpus-per-task=1"
 spec:
   restartPolicy: OnFailure 
   containers:
   - image: busybox
     command:
-      - /m100/home/userexternal/gsurace0/script.sh
+      - sleep
+      - infinity 
     imagePullPolicy: Always
     name: busyecho
   dnsPolicy: ClusterFirst
@@ -17,6 +16,7 @@ spec:
     kubernetes.io/role: agent
     beta.kubernetes.io/os: linux
     type: virtual-kubelet
+    kubernetes.io/hostname: mock-vk
   tolerations:
   - key: virtual-kubelet.io/provider
     operator: Exists
