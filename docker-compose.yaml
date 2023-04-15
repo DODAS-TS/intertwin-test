@@ -18,7 +18,7 @@ services:
     #   retries: 3
     #   start_period: 5s
   interlink-plugin:
-    image: ghcr.io/dodas-ts/intertwin-plugin:docker-v4
+    image: ghcr.io/dodas-ts/intertwin-plugin:docker-v5
     restart: always
     privileged: true
     expose:
